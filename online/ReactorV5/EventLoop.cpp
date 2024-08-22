@@ -48,7 +48,7 @@ void EventLoop::waitEpollFd()
     //获取vector第一个元素的首地址
     int nready = 0;
     do{
-        nready = ::epoll_wait(_epfd, &_evtList[0], _evtList.size(), 3000);
+        nready = ::epoll_wait(_epfd, &_evtList[0], _evtList.size(), 10000); //10秒超时
     }while(-1 == nready && errno == EINTR);
     
     if(-1 == nready){

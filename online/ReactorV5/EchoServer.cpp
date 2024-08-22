@@ -1,10 +1,10 @@
 #include "EchoServer.h"
 #include <functional>
 #include <iostream>
+#include "../nlohmann/json.hpp"
 using std::bind;
 using std::cout;
 using std::endl;
- 
 
 MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 : _msg(msg)
@@ -15,9 +15,27 @@ MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
  
 void MyTask::process()
 {
-    //可以在process函数中进行业务逻辑的处理
-    _msg = "helloReactorV5\n";
+    //在process函数中进行业务逻辑的处理
+    nlohmann::json json_object = nlohmann::json::parse(_msg);      
     
+    string type, context;
+    for(auto &p: json_object.items()){
+        type = p.key();
+        context = p.value();
+    }
+
+    if(type == "1"){
+        _msg = "客官要候选词推荐\n";    
+        
+
+
+    }else if(type == "2"){
+        _msg = "客官要网页查询\n";
+
+    }else{ //预防手段。实际上非1、2的type,已经在客户端进行拦截,不会发送到服务器
+        cout << "type == " << type << "\n";
+        _msg = "请输入正确的type\n";
+    }
 
     _con->sendInLoop(_msg);
 }
