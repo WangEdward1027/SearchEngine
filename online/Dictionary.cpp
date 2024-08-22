@@ -100,4 +100,3 @@ int Dictionary::distance(string candidate)
 {
 
 }
-
