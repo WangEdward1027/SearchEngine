@@ -8,7 +8,7 @@ all: myclient Server
 myclient:
 	g++ myclient.cpp -o myclient
 Server:
-	g++ ./ReactorV5/*.cpp -o Server
+	g++ ./ReactorV5/*.cpp Dictionary.cpp -o Server
 
 .PHONY: clean
 clean:

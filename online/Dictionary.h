@@ -18,28 +18,21 @@ class Dictionary
 public:
     Dictionary();
     ~Dictionary();
+  
+    void loadCnIndex();      //将字典索引加载到内存
+    void loadCnDictionary(); //将词频字典加载到内存
     
-    //将词频字典文件加载到内存
-    void loadDictionary();
+    /* int distance(string candidate); */
+    /* vector<string> doQuery(const string & key); */
+    /* void queryIndex(); */
+public:
+     //将索引和字典读入内存
+    map<string, set<int>> _index_cn;   //中文词典索引
+    vector<string> _dict_cn;           //中文字典的键,分词后的词语    
 
-    //将字典索引文件加载到内存
-    void loadIndex();
-
-    //获取字典库
-    vector<pair<string,int>> getDict();
-
-    //获取索引库
-    map<string, set<int>> getIndexTable();
-
-    vector<string> doQuery(const string & key);
-    void queryIndex();
-    int distance(string candidate);
-
-private:
-    vector<pair<string,int>> _dict_en;  //英文词典库
-    vector<pair<string,int>> _dict_cn;  //中文词典库
-    map<string, set<int>> _index_en;    //英文索引库
-    map<string, set<int>> _index_cn;    //中文索引库
+    //还没用上
+    /* map<string, set<int>> _index_en;   //英文索引库 */
+    /* vector<pair<string,int>> _dict_en; //英文词典库 */
 };
 
 #endif

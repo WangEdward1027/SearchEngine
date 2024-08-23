@@ -3,6 +3,7 @@
 
 #include "ThreadPool.h"
 #include "TcpServer.h"
+#include "../Dictionary.h"
 #include <set>
 using std::set;
 
@@ -20,9 +21,11 @@ private:
     //每个字符对应的候选词集合
     map<string,set<string>> _candidetaWordSet;
 
-    //将索引和字典读入内存
-    map<string, set<int>> _index_cn;    //中文词典索引
-    vector<string> _dict_cn; //中文字典的键,分词后的词语
+    /* //将索引和字典读入内存 */
+    /* map<string, set<int>> _index_cn;    //中文词典索引 */
+    /* vector<string> _dict_cn; //中文字典的键,分词后的词语 */
+    //字典类(预热,加载到内存)        
+    Dictionary _dict;                        
 };
 
 class EchoServer

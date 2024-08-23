@@ -11,42 +11,29 @@ using std::endl;
 using std::ifstream;
 using std::istringstream;
 
+#if 0
+void test(){
+ //测试:输出 map<string,set<type>>
+        cout << "---------\n";
+         for(auto &elem : _candidetaWordSet){
+            cout << elem.first <<": ";
+            for(auto &e: elem.second){
+                cout << e << " ";
+            }        
+            cout << "\n";
+        }
+        cout << "--------\n";
+}
+#endif
+
 MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 : _msg(msg)
 , _con(con)
+, _dict()
 {
-    //预热:
-    //1.将索引读入内存
-    string filename = "../offline/buildDictIndex/data/index_chinese.dat";
-    ifstream ifs(filename);
-    if(!ifs.good()){
-        cerr << "文件" << filename << "打开失败\n";
-        exit(1);
-    }
-    string line;
-    while(getline(ifs, line)){
-        istringstream iss(line);
-        string word;
-        int index;
-        iss >> word;
-        while(iss >> index){
-            _index_cn[word].insert(index);   
-        }
-    }
-
-    //2.将字典的key读入内存
-    string filename_dict = "../offline/buildDictIndex/data/dictionary_chinese.dat";
-    ifstream ifs2(filename_dict);
-    if(!ifs2.good()){
-        cerr << "文件" << filename_dict << "打开失败\n";
-        exit(1);
-    }
-    while(getline(ifs2, line)){
-        istringstream iss(line);
-        string word;
-        iss >> word;
-        _dict_cn.push_back(word);
-    }
+    //预热
+    _dict.loadCnIndex();
+    _dict.loadCnDictionary();
 }
  
 void MyTask::process()
@@ -78,25 +65,13 @@ void MyTask::process()
         //根据索引找到字典中对应的词,放入对应字符的候选词集合set
         for(auto &character: _character){
             /* set index = _index_cn[character]; */
-            /* for(auto &idx : index){ */
-            /*     _candidetaWordSet[character].insert(_dict_cn[idx]); */
-            /* } */                       
-            for(auto &index:_index_cn[character]){ //遍历set
-                _candidetaWordSet[character].insert(_dict_cn[index]);       
-            }
+            set index = _dict._index_cn[character];
+            for(auto &idx : index){
+                /* _candidetaWordSet[character].insert(_dict_cn[idx]); */
+                _candidetaWordSet[character].insert(_dict._dict_cn[idx]);
+            }                       
         }
-
-        //测试:输出 map<string,set<type>>
-        /* cout << "---------\n"; */
-        /*  for(auto &elem : _candidetaWordSet){ */
-        /*     cout << elem.first <<": "; */
-        /*     for(auto &e: elem.second){ */
-        /*         cout << e << " "; */
-        /*     } */        
-        /*     cout << "\n"; */
-        /* } */
-        /* cout << "--------\n"; */
-        
+               
         //将候选词插入json数组中
         nlohmann::json json_array;
         for(auto &elem : _candidetaWordSet){
@@ -125,14 +100,9 @@ void MyTask::process()
 EchoServer::EchoServer(size_t threadNum, size_t queSize, const string & ip, unsigned short port)
 : _pool(threadNum, queSize)
 , _server(ip, port)
-{
+{}
 
-}
-
-EchoServer::~EchoServer()
-{
-
-}
+EchoServer::~EchoServer(){}
 
 void EchoServer::start()
 {
