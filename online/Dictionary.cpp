@@ -48,7 +48,7 @@ void Dictionary::loadCnDictionary()
     }
 }
 
-int Dictionary::distance(string candidate)
-{
+/* int Dictionary::distance(string candidate) */
+/* { */
 
-}
+/* } */

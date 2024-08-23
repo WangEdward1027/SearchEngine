@@ -13,16 +13,16 @@ using std::istringstream;
 
 #if 0
 void test(){
- //测试:输出 map<string,set<type>>
-        cout << "---------\n";
-         for(auto &elem : _candidetaWordSet){
-            cout << elem.first <<": ";
-            for(auto &e: elem.second){
-                cout << e << " ";
-            }        
-            cout << "\n";
-        }
-        cout << "--------\n";
+    //测试:输出 map<string,set<type>>
+    cout << "---------\n";
+    for(auto &elem : _candidetaWordSet){
+        cout << elem.first <<": ";
+        for(auto &e: elem.second){
+            cout << e << " ";
+        }        
+        cout << "\n";
+    }
+    cout << "--------\n";
 }
 #endif
 

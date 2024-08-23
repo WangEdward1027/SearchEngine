@@ -78,7 +78,7 @@ int main(int argc, char *argv[])
         }
         iss >> context;
         
-        ////封装小火车协议
+        //封装小火车协议
         /* train_t t; */       
         /* memset(&t, 0, sizeof(t)); */
         /* t.length = line.size(); */
