@@ -3,6 +3,8 @@
 
 #include "ThreadPool.h"
 #include "TcpServer.h"
+#include <set>
+using std::set;
 
 class MyTask
 {
@@ -12,6 +14,15 @@ public:
 private:
     string _msg;
     TcpConnectionPtr _con;
+
+    //关键词分解成一个个字符
+    vector<string> _character;
+    //每个字符对应的候选词集合
+    map<string,set<string>> _candidetaWordSet;
+
+    //将索引和字典读入内存
+    map<string, set<int>> _index_cn;    //中文词典索引
+    vector<string> _dict_cn; //中文字典的键,分词后的词语
 };
 
 class EchoServer

@@ -1,16 +1,52 @@
 #include "EchoServer.h"
 #include <functional>
 #include <iostream>
+#include <fstream>
+#include <sstream>
 #include "../nlohmann/json.hpp"
 using std::bind;
 using std::cout;
+using std::cerr;
 using std::endl;
+using std::ifstream;
+using std::istringstream;
 
 MyTask::MyTask(const string &msg, const TcpConnectionPtr &con)
 : _msg(msg)
 , _con(con)
 {
+    //预热:
+    //1.将索引读入内存
+    string filename = "../offline/buildDictIndex/data/index_chinese.dat";
+    ifstream ifs(filename);
+    if(!ifs.good()){
+        cerr << "文件" << filename << "打开失败\n";
+        exit(1);
+    }
+    string line;
+    while(getline(ifs, line)){
+        istringstream iss(line);
+        string word;
+        int index;
+        iss >> word;
+        while(iss >> index){
+            _index_cn[word].insert(index);   
+        }
+    }
 
+    //2.将字典的key读入内存
+    string filename_dict = "../offline/buildDictIndex/data/dictionary_chinese.dat";
+    ifstream ifs2(filename_dict);
+    if(!ifs2.good()){
+        cerr << "文件" << filename_dict << "打开失败\n";
+        exit(1);
+    }
+    while(getline(ifs2, line)){
+        istringstream iss(line);
+        string word;
+        iss >> word;
+        _dict_cn.push_back(word);
+    }
 }
  
 void MyTask::process()
@@ -24,13 +60,59 @@ void MyTask::process()
         context = p.value();
     }
 
+    //根据type处理不同的业务:1 候选词推荐, 2 网页查询
+    //1.候选词推荐
     if(type == "1"){
-        _msg = "客官要候选词推荐\n";    
+        //候选词分解为一个个字符
+        for(size_t i = 0; i < context.size();){
+            // 1000 0000 & ch
+            if((context[i] & 0x80) == 0){  //英文
+                _character.push_back(context.substr(i,1));
+                i++;
+            }else{  //中文
+                _character.push_back(context.substr(i,3));
+                i += 3;
+            }
+        }
         
+        //根据索引找到字典中对应的词,放入对应字符的候选词集合set
+        for(auto &character: _character){
+            /* set index = _index_cn[character]; */
+            /* for(auto &idx : index){ */
+            /*     _candidetaWordSet[character].insert(_dict_cn[idx]); */
+            /* } */                       
+            for(auto &index:_index_cn[character]){ //遍历set
+                _candidetaWordSet[character].insert(_dict_cn[index]);       
+            }
+        }
 
-
+        //测试:输出 map<string,set<type>>
+        /* cout << "---------\n"; */
+        /*  for(auto &elem : _candidetaWordSet){ */
+        /*     cout << elem.first <<": "; */
+        /*     for(auto &e: elem.second){ */
+        /*         cout << e << " "; */
+        /*     } */        
+        /*     cout << "\n"; */
+        /* } */
+        /* cout << "--------\n"; */
+        
+        //将候选词插入json数组中
+        nlohmann::json json_array;
+        for(auto &elem : _candidetaWordSet){
+            nlohmann::json child_object;
+            for(auto &candidateword: elem.second){
+                child_object.push_back(candidateword);
+            }
+            json_array.push_back(child_object); 
+        }
+        //序列化
+        _msg = json_array.dump();
+    
+    //2.网页查询
     }else if(type == "2"){
         _msg = "客官要网页查询\n";
+
 
     }else{ //预防手段。实际上非1、2的type,已经在客户端进行拦截,不会发送到服务器
         cout << "type == " << type << "\n";
