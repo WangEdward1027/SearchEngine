@@ -6,7 +6,6 @@
 #include "../nlohmann/json.hpp"
 using std::bind;
 using std::cout;
-using std::cerr;
 using std::endl;
 using std::ifstream;
 using std::istringstream;
