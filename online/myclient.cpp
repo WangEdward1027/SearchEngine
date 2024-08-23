@@ -8,12 +8,14 @@
 #include <iostream>      
 #include <string>
 #include <sstream>
+#include <vector>
 #include "nlohmann/json.hpp"
 using std::cout;
 using std::cin;
 using std::cerr;
 using std::string;
 using std::istringstream;
+using std::vector;
 
 //小火车协议
 /* typedef struct train{ */
@@ -42,10 +44,10 @@ int main(int argc, char *argv[])
     struct sockaddr_in server_addr;
     memset(&server_addr, 0 ,sizeof(server_addr));
     server_addr.sin_family = AF_INET;
-    /* server_addr.sin_addr.s_addr = inet_addr(argv[1]); //要连接的服务器的IP地址 */
+    //server_addr.sin_addr.s_addr = inet_addr(argv[1]);   //要连接的服务器的IP地址
     server_addr.sin_addr.s_addr = inet_addr("127.0.0.1"); //要连接的服务器的IP地址
-    /* server_addr.sin_port = htons(atoi(argv[2]));      //要连接的服务器的端口号 */
-    server_addr.sin_port = htons(8888);      //要连接的服务器的端口号
+    //server_addr.sin_port = htons(atoi(argv[2]));        //要连接的服务器的端口号
+    server_addr.sin_port = htons(8888);                   //要连接的服务器的端口号
     
     //3.连接服务器
     int ret = connect(listenfd, (struct sockaddr *)&server_addr, sizeof(server_addr));
@@ -98,7 +100,7 @@ int main(int argc, char *argv[])
         }
         
         //读取服务器返回的数据
-        char buffer[4096] = {};
+        char buffer[65536] = {};  //数组太小会报错json_error
         len = recv(listenfd, buffer, sizeof(buffer), 0);
         if(len == -1){
             perror("recv() error");
@@ -106,7 +108,37 @@ int main(int argc, char *argv[])
         }else if(len == 0){
             cout << "len == 0\n";
         }else{
-            cout << "recv msg from server: " << buffer << "\n";
+            string resp = buffer;   
+            /* cout << "recv msg from server: " << resp << "\n"; */
+            
+            //对收到的json数组进行解析
+            nlohmann::json json_array = nlohmann::json::parse(resp);
+            
+            //错误判断
+            if(resp == "null"){  //索引查不到推荐词的情况,会返回null
+                cout << "无推荐词\n\n"; 
+                continue;
+            } 
+            if(!json_array.is_array()){
+                cerr << "json数组解析错误\n";
+                exit(1);
+            }
+            
+            //解析json数组,并存储
+            vector<string> candidateword;
+            
+            for(int i = 0; i < json_array.size(); ++i){
+                /* cout << "json_array[" << i << "] = " << json_array[i] << "\n"; */
+                nlohmann::json child_array = json_array[i];    
+                for(int j = 0; j < child_array.size(); ++j){
+                    candidateword.push_back(child_array[j]);
+                }
+            }
+            //显示推荐词(目前是所有相关词,没有进行筛选和排序)
+            for(int i = 0; i < candidateword.size(); ++i){
+                cout << i+1 << "." << candidateword[i] << "\n";
+            }
+
         }
         cout << "\n\n";
     }
