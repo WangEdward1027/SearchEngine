@@ -41,8 +41,8 @@ private:
     
     //中文词典和索引
     vector<string> _words;              //存储cppjieba分词后的结果
-    map<string,int> _dict_cn_map;       //中文词频字典,先生成map(速度快),再导入vector
-    vector<pair<string,int>> _dict_cn;  
+    map<string,int> _dict_cn_map;       //中文词频字典的map:先生成map(速度快),再导入vector
+    vector<pair<string,int>> _dict_cn;  //中文词频字典的vector
     map<string, set<int>> _index_cn;    //中文词典索引
 };
 

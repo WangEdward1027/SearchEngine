@@ -1,0 +1,108 @@
+#ifndef __PROTOCOL_HPP__
+#define __PROTOCOL_HPP__
+
+#include "./json.hpp"
+
+#include <fstream>
+#include <iostream>
+#include <vector>
+
+using std::cerr;
+using std::cout;
+using std::endl;
+using std::ifstream;
+using std::string;
+using std::vector;
+using namespace nlohmann;
+
+using json = nlohmann::json;
+
+namespace nlohmann
+{
+
+}
+
+//namespace se
+//{
+class ProtocolParser
+{
+public:
+    struct res
+    {
+        int _id;
+        vector<string> _content;
+    };
+
+    void addString(const string &str);
+    //void readFile(const string filename);
+    string doPack(int, vector<string>);
+    string doPack(int, string);
+    struct res doParse(const string &str);
+
+private:
+    json _j;
+};
+
+// void ProtocolParser::readFile(const string filename)
+// {
+//     ifstream ifs(filename, ifstream::in);
+//     if (!ifs) {
+//         cerr << "open file error" << endl;
+//     }
+//     ifs >> _j;
+// }
+
+// 将对象序列化为json格式 发送给客户端
+string ProtocolParser::doPack(int id, vector<string> content)
+{
+    _j["id"] = id;
+    _j["content"] = content;
+
+    return _j.dump();
+}
+
+string ProtocolParser::doPack(int id, string content)
+{
+    _j["id"] = id;
+    _j["content"].push_back(content);
+
+    return _j.dump();
+}
+
+// 将json格式反序列化为对象
+struct ProtocolParser::res ProtocolParser::doParse(const string &str)
+{
+    struct res tmp;
+    json mp;
+    // json _tmp;
+    string _str = str;
+    mp = _j.parse(str);
+
+    tmp._id = mp.at("id").get<int>();
+    for (auto &i : mp.at("content"))
+    {
+        tmp._content.push_back(i);
+    }
+
+    return tmp;
+}
+
+// int main()
+// {
+//     ProtocolParser p;
+
+//     vector<string> tmp { { "134" }, { "123" } };
+//     auto ret = p.undoParse(1, tmp);
+//     cout << ret << endl;
+
+//     auto tmm = p.doParse(ret);
+//     std::cout << tmm._id << " " << endl;
+//     for(auto i : tmm._content){
+//         cout << i << endl;
+//     }
+
+//     return 0;
+// }
+//}
+
+#endif

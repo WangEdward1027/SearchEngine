@@ -49,7 +49,7 @@ void MyTask::process()
     //根据type处理不同的业务:1 候选词推荐, 2 网页查询
     //1.候选词推荐
     if(type == "1"){
-        //候选词分解为一个个字符
+        //(1)关键词分解:候选词分解为一个个字符
         for(size_t i = 0; i < context.size();){
             // 1000 0000 & ch
             if((context[i] & 0x80) == 0){  //英文
@@ -61,17 +61,17 @@ void MyTask::process()
             }
         }
         
-        //根据索引找到字典中对应的词,放入对应字符的候选词集合set
+        //(2)候选词召回:根据索引找到字典中对应的词,放入对应字符的候选词集合set
         for(auto &character: _character){
-            /* set index = _index_cn[character]; */
             set index = _dict._index_cn[character];
             for(auto &idx : index){
-                /* _candidetaWordSet[character].insert(_dict_cn[idx]); */
                 _candidetaWordSet[character].insert(_dict._dict_cn[idx]);
             }                       
         }
-               
-        //将候选词插入json数组中
+        
+        //(3)排序处理
+
+        //(4)返回推荐内容:将候选词插入json数组中
         nlohmann::json json_array;
         for(auto &elem : _candidetaWordSet){
             nlohmann::json child_object;

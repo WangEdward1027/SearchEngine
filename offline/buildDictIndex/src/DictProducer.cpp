@@ -131,7 +131,6 @@ void DictProducer::buildCnDict()
 
     //遍历语料路径 _files
     for(int i = 0; i < size; ++i){
-        /* string filename = "../data/text_chinese/C3-Art0002.txt"; */
         string filename = _files[i];
         ifstream ifs(filename);
         if(!ifs.good()){
@@ -142,7 +141,7 @@ void DictProducer::buildCnDict()
         // 读取整个文件到一个string中  
         string sentence((std::istreambuf_iterator<char>(ifs)), 
                         std::istreambuf_iterator<char>()); 
-
+        //cppjieba的cut()方法进行分词
         _words =_cuttor->cut(sentence);
         
         //构建map
