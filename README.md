@@ -88,7 +88,13 @@ unordered_map<string, vector<pair<int, double>>> _invertIndexTable; //倒排索�
 
 
 ### Demo展示
+搜索引擎网址: http://www.johnwick.asia   <br>
+(谷歌访客模式访问，要http，不能是https)   <br>
+
+
 ![image](https://github.com/user-attachments/assets/bd633a76-bcef-49d7-a9b1-120f8f238797)
+![image](https://github.com/user-attachments/assets/d577280c-d832-48f2-92d9-80df3c973dd3)
+
 
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20201105174446463.gif#pic_center)
@@ -100,9 +106,6 @@ unordered_map<string, vector<pair<int, double>>> _invertIndexTable; //倒排索�
 
 ### 架构图
 ![image](https://github.com/user-attachments/assets/09c1885a-c0a2-4e25-8d06-1094f5cd1397)
-
-![在这里插入图片描述](https://img-blog.csdnimg.cn/20200713090409283.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1dvcnRoeV9XYW5n,size_16,color_FFFFFF,t_70)
-<br>
 
 ### 技术亮点
 #### 离线版本
