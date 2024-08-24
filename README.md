@@ -88,6 +88,8 @@ unordered_map<string, vector<pair<int, double>>> _invertIndexTable; //倒排索�
 
 
 ### Demo展示
+![image](https://github.com/user-attachments/assets/bd633a76-bcef-49d7-a9b1-120f8f238797)
+
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20201105174446463.gif#pic_center)
 
