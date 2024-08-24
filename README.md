@@ -100,6 +100,7 @@ unordered_map<string, vector<pair<int, double>>> _invertIndexTable; //倒排索�
 
 
 ### 架构图
+![image](https://github.com/user-attachments/assets/09c1885a-c0a2-4e25-8d06-1094f5cd1397)
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20200713090409283.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1dvcnRoeV9XYW5n,size_16,color_FFFFFF,t_70)
 <br>
