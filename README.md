@@ -35,6 +35,9 @@
 计算过程较为复杂，详细可参考：
 [百度百科：TF-IDF算法](https://baike.baidu.com/item/tf-idf/8816134)
 
+![image](https://github.com/user-attachments/assets/ef871ec2-ffd4-4590-9911-7dbafbd1b2e8)
+
+
 2. **倒排索引**
 
 倒排索引是**通过属性值来查找记录**。通常我们使用索引，是通过记录来查找属性，但是这样显然效率太低；于是倒排索引的出现帮助我们解决了效率的问题，因为它可以通过属性值找到对应的记录。
