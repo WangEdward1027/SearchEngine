@@ -35,7 +35,7 @@
 计算过程较为复杂，详细可参考：
 [百度百科：TF-IDF算法](https://baike.baidu.com/item/tf-idf/8816134)
 
-![image](https://github.com/user-attachments/assets/ef871ec2-ffd4-4590-9911-7dbafbd1b2e8)
+![image](https://github.com/user-attachments/assets/9b5980fb-8e3c-45d3-9705-0c4bbef14ada)
 
 
 2. **倒排索引**
